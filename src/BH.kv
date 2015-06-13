@@ -1,8 +1,33 @@
 
+
+
+<PayButton>:
+    size: 200, 50
+    canvas:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+	        Label:
+		font_size: 70  
+		center: self.parent.center
+        text: str(self.labeltext)
+
+
+
+
 <BH>:
+	pay: pay_button
+
 	    canvas:
         Rectangle:
             pos: self.center_x-5, 0
             size: 10, self.height
 
-	
+    PayButton:
+	id: pay_button
+	    center: self.parent.center
+	        Label:
+		font_size: 70  
+		center: self.parent.center
+        text: str(self.labeltext)
+

@@ -12,25 +12,15 @@ from kivy.clock import Clock
 
 
 class PayButton(Widget):
-    labeltext = StringProperty("Pay 100$")
-class BH(Widget):
+	pass
+class Bh(Widget):
     pay = ObjectProperty(None)
-
-
-    def main(self):
-        print "lol"
-
-
-    def update(self, dt):
-            return
 
 
 
 class BHApp(App):
     def build(self):
-        app = BH()
-        app.main()
-        Clock.schedule_interval(app.update, 1.0 / 60.0)
+        app = Bh()
         return app
 
 if(__name__ == "__main__"):

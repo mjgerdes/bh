@@ -1,0 +1,260 @@
+Configuration
+
+Register for a developer account and get your client_id and secret at PayPal Developer Portal.
+
+import paypalrestsdk
+paypalrestsdk.configure({
+  "mode": "sandbox", # sandbox or live
+  "client_id": "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
+  "client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM" })
+
+Configure through environment variables:
+
+export PAYPAL_MODE=sandbox   # sandbox or live
+export PAYPAL_CLIENT_ID=EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM
+export PAYPAL_CLIENT_SECRET=EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM
+
+Configure through a non-global API object
+
+import paypalrestsdk
+my_api = paypalrestsdk.Api({
+  'mode': 'sandbox',
+  'client_id': '...',
+  'client_secret': '...'})
+
+payment = paypalrestsdk.Payment({...}, api=my_api)
+
+Create Payment
+
+import paypalrestsdk
+import logging
+
+# Include Headers and Content by setting logging level to DEBUG, particularly for
+# Paypal-Debug-Id if requesting PayPal Merchant Technical Services for support
+logging.basicConfig(level=logging.INFO)
+
+paypalrestsdk.configure({
+  "mode": "sandbox", # sandbox or live
+  "client_id": "EBWKjlELKMYqRNQ6sYvFo64FtaRLRR5BdHEESmha49TM",
+  "client_secret": "EO422dn3gQLgDbuwqTjzrFgFtaRLRR5BdHEESmha49TM" })
+
+payment = paypalrestsdk.Payment({
+  "intent": "sale",
+  "payer": {
+    "payment_method": "credit_card",
+    "funding_instruments": [{
+      "credit_card": {
+        "type": "visa",
+        "number": "4417119669820331",
+        "expire_month": "11",
+        "expire_year": "2018",
+        "cvv2": "874",
+        "first_name": "Joe",
+        "last_name": "Shopper" }}]},
+  "transactions": [{
+    "item_list": {
+      "items": [{
+        "name": "item",
+        "sku": "item",
+        "price": "1.00",
+        "currency": "USD",
+        "quantity": 1 }]},
+    "amount": {
+      "total": "1.00",
+      "currency": "USD" },
+    "description": "This is the payment transaction description." }]})
+
+if payment.create():
+  print("Payment created successfully")
+else:
+  print(payment.error)
+
+Get Payment details
+
+# Fetch Payment
+payment = paypalrestsdk.Payment.find("PAY-57363176S1057143SKE2HO3A")
+
+# Get List of Payments
+payment_history = paypalrestsdk.Payment.all({"count": 10})
+payment_history.payments
+
+Execute Payment
+
+Only for Payment with payment_method as "paypal"
+
+payment = paypalrestsdk.Payment.find("PAY-57363176S1057143SKE2HO3A")
+
+if payment.execute({"payer_id": "DUFRQ8GWYMJXC"}):
+  print("Payment execute successfully")
+else:
+  print(payment.error) # Error Hash
+
+Subscription
+
+Create subscription payments i.e. planned sets of future recurring payments at periodic intervals. Billing plans serve as the template for a subscription while billing agreements can be used to have customers subscribe to the plan.
+Create a billing plan
+
+from paypalrestsdk import BillingPlan
+
+billing_plan = BillingPlan({
+    "name": "Fast Speed Plan",
+    "description": "Create Plan for Regular",
+    "merchant_preferences": {
+        "auto_bill_amount": "yes",
+        "cancel_url": "http://www.paypal.com/cancel",
+        "initial_fail_amount_action": "continue",
+        "max_fail_attempts": "1",
+        "return_url": "http://www.paypal.com/execute",
+        "setup_fee": {
+            "currency": "USD",
+            "value": "25"
+        }
+    },
+    "payment_definitions": [
+        {
+            "amount": {
+                "currency": "USD",
+                "value": "100"
+            },
+            "charge_models": [
+                {
+                    "amount": {
+                        "currency": "USD",
+                        "value": "10.60"
+                    },
+                    "type": "SHIPPING"
+                },
+                {
+                    "amount": {
+                        "currency": "USD",
+                        "value": "20"
+                    },
+                    "type": "TAX"
+                }
+            ],
+            "cycles": "0",
+            "frequency": "MONTH",
+            "frequency_interval": "1",
+            "name": "Regular 1",
+            "type": "REGULAR"
+        }
+    ],
+    "type": "INFINITE"
+})
+
+response = billing_plan.create()
+print(response)
+
+Check out more samples. The Subscription REST APIs are fully supported by the sdk.
+
+Also, check out a flask application demonstrating the use of subscription APIs from both merchant and customer points of view.
+Future Payments
+
+Check out this sample for executing future payments for a customer who has granted consent on a mobile device.
+Orders
+
+Create and manage Orders, i.e. getting consent from buyer for a purchase but only placing the funds on hold when the merchant is ready to fulfill the order, have a look at samples
+Payouts
+
+For creating batch and single payouts, check out the samples for payouts and payout items. The Payouts feature enables you to make PayPal payments to multiple PayPal accounts in a single API call.
+Create a synchronous payout
+
+from paypalrestsdk import Payout, ResourceNotFound
+
+payout = Payout({
+    "sender_batch_header": {
+        "sender_batch_id": "batch_1",
+        "email_subject": "You have a payment"
+    },
+    "items": [
+        {
+            "recipient_type": "EMAIL",
+            "amount": {
+                "value": 0.99,
+                "currency": "USD"
+            },
+            "receiver": "shirt-supplier-one@mail.com",
+            "note": "Thank you.",
+            "sender_item_id": "item_1"
+        }
+    ]
+})
+
+if payout.create(sync_mode=True):
+    print("payout[%s] created successfully" %
+          (payout.batch_header.payout_batch_id))
+else:
+    print(payout.error)
+
+Explore further payment capabilities
+
+For exploring additional payment capabilites, such as handling discounts, insurance, soft_descriptor and invoice_number, have a look at this example. These bring REST payment functionality closer to parity with older Merchant APIs.
+Customizing a PayPal payment experience
+
+Customizing a PayPal payment experience is available as of version 1.5.0 enabling merchants to provide a customized experience to consumers from the merchant’s website to the PayPal payment. Get started with the supported rest methods and samples.
+Webhooks - Receive notifications about PayPal Payments
+
+To receive notifications from PayPal about Payment events on your server, webhook support is now available as of version 1.6.0.
+
+    For creating and managing Webhook and Webhook Events, check out the samples to see how you can use the Python sdk to create and manage webhooks and webhook events.
+    See this sample for verifying that the webhook response is unaltered, from PayPal and targeted towards the intended recipient.
+    See this sample for parsing webhook payload and getting the resource delivered via the webhook event.
+
+Invoicing
+
+Create, send and manage invoices.
+Create an invoice
+
+from paypalrestsdk import Invoice
+
+invoice = Invoice({
+  'merchant_info': {
+    "email": "default@merchant.com",
+  },
+  "billing_info": [{
+    "email": "example@example.com"
+  }],
+  "items": [{
+      "name": "Widgets",
+      "quantity": 20,
+      "unit_price": {
+        "currency": "USD",
+        "value": 2
+      }
+    }],
+})
+
+response = invoice.create()
+print(response)
+
+OpenID Connect
+
+import paypalrestsdk
+from paypalrestsdk.openid_connect import Tokeninfo, Userinfo
+
+paypalrestsdk.configure({
+  "mode": "sandbox",
+  "client_id": "CLIENT_ID",
+  "client_secret": "CLIENT_SECRET",
+  "openid_redirect_uri": "http://example.com" })
+
+# Generate login url
+login_url = Tokeninfo.authorize_url({ "scope": "openid profile"})
+
+# Create tokeninfo with Authorize code
+tokeninfo = Tokeninfo.create("Replace with Authorize code")
+
+# Refresh tokeninfo
+tokeninfo = tokeninfo.refresh()
+
+# Create tokeninfo with refresh_token
+tokeninfo = Tokeninfo.create_with_refresh_token("Replace with refresh_token")
+
+# Get userinfo
+userinfo  = tokeninfo.userinfo()
+
+# Get userinfo with access_token
+userinfo  = Userinfo.get("Replace with access_token")
+
+# Generate logout url
+logout_url = tokeninfo.logout_url()

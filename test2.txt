@@ -1,3 +1,6 @@
 BLOBB rofl test $$$
 
 
+int main(argc, argv) {}
+
+

@@ -1,3 +1,4 @@
+#! /usr/bin/python
 # main.py
 
 
@@ -8,6 +9,16 @@ from kivy.properties import NumericProperty, ReferenceListProperty,\
 from kivy.vector import Vector
 from kivy.clock import Clock
 
-import 
+class BH(Widget):
+    def main(self):
+        print "lol"
+
+
+class BHApp(App):
+    def build(self):
+        app = BH()
+        app.main()
+        return app
 
 if(__name__ == "__main__"):
+    BHApp().run()

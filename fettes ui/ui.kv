@@ -1,0 +1,29 @@
+#:kivy 1.0.9
+
+<BoxyFoxy>:
+	nameinput: the_input
+	submitbutton: the_button
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 5
+		spacing: 5
+		Label:
+			text: 'Name'
+		TextInput:
+			id: the_input
+		Button:
+			id: the_button
+			text: 'Submit'
+			
+<Controller>:
+	boxy: the_boxyfoxy
+	FloatLayout:
+		size: root.size
+		BoxyFoxy:
+			id: the_boxyfoxy
+			size_hint: (.5,.5)
+			pos_hint:{'center_x':.5,'center_y':.5}
+			
+				
+
+			

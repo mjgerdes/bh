@@ -1,0 +1,23 @@
+Idee: Eine Event & Projektplanungsumgebung (mit Fokus auf Studenten)
+
+- virtueller Planungs-/Konferenzraum (Herzstück)
+  -> Eigenbau z.B. mit Pad, Wiki und/oder Anbindung von Facebook, Skype, google
+hangouts/docs etc.
+- Finanzplaner
+  -> Abwicklung über paypal: Workshop
+  -> Einbindung diverser Läden (Amazon, Ebay, etc.)
+- Terminplaner
+  -> doodle Anbindung: http://doodle.com/de/funktionen/api oder integration von
+dudle
+- Benachrichtigung
+  -> Mail und/oder Telefon Anbindung (da gabs auch irgend so Angebote hier!)
+- Ressourcenverwaltung
+  -> Einbindung von Clouddiensten, möglicherweise eigener Server (z.b.
+Owncloud), Facebook, Instagram, Git, etc.
+
+Todo:
+1. noch mehr Möglichkeiten finden.
+2. Entscheiden was grundsätzlich sinnvoll ist, was erstmal realisierbar und was
+totaler Quatsch ist.
+3. Aufgaben verteilen
+4.

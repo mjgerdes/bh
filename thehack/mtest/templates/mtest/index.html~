@@ -1,0 +1,10 @@
+
+<body bgcolor=black text=white>
+<h1>Enter your name!</h1>
+<div align='center'>
+<form action="{% url 'mtest' question.id %}" method="post">
+    <input type="text" name="namestring" id="namestringid" value="" />
+<input type="submit" value="namestring" />
+</form>
+</div>
+</body>

@@ -1,0 +1,11 @@
+
+<body bgcolor=black text=white>
+<h1>Enter your name!</h1>
+<div align='center'>
+<form action="{% url 'mtest:index'%}" method="post">
+{% csrf_token %}
+    <input type="text" name="namestring" id="namestringid" value="" />
+<input type="submit" value="Ok" />
+</form>
+</div>
+</body>
